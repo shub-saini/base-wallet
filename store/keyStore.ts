@@ -1,9 +1,9 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 type KeyType = {
   privateKey: string;
-  publicKey: string;
+  publicAddress: string;
 };
 
 type KeyState = {
@@ -16,12 +16,17 @@ type KeyState = {
         derivedAccountNumber: number;
       }[];
   setMnemonics: (mnemonics: string) => void;
-  addAccount: (
-    eth: KeyType,
-    sol: KeyType,
-    btc: KeyType,
-    derivedAccountNumber: number
-  ) => void;
+  addAccount: ({
+    eth,
+    sol,
+    btc,
+    derivedAccountNumber,
+  }: {
+    eth: KeyType;
+    sol: KeyType;
+    btc: KeyType;
+    derivedAccountNumber: number;
+  }) => void;
   deleteAccount: (derivedAccountNumber: number) => void;
   clearWallet: () => void;
 };
@@ -32,7 +37,7 @@ const _useKeyStore = create(
       mnemonics: null,
       accounts: [],
       setMnemonics: (mnemonics) => set({ mnemonics }),
-      addAccount: (eth, sol, btc, derivedAccountNumber) =>
+      addAccount: ({ eth, sol, btc, derivedAccountNumber }) =>
         set((state) => ({
           accounts: [
             ...state.accounts,
@@ -49,7 +54,7 @@ const _useKeyStore = create(
       clearWallet: () => set({ mnemonics: null, accounts: [] }),
     }),
     {
-      name: 'wallet-keystore',
+      name: "wallet-keystore",
     }
   )
 );

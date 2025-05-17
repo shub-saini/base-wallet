@@ -1,4 +1,4 @@
-import { generateMnemonic, validateMnemonic } from 'bip39';
+import { generateMnemonic, validateMnemonic } from "bip39";
 
 export function newMnemonics(noOfWords: 12 | 24) {
   if (noOfWords === 12) {
