@@ -6,11 +6,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Trash } from "lucide-react";
-import { Button } from "./ui/button";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { useKeyStore } from "@/store/keyStore";
+} from '@/components/ui/dialog';
+import { Trash } from 'lucide-react';
+import { Button } from './ui/button';
+import { DialogClose } from '@radix-ui/react-dialog';
+import { useKeyStore } from '@/store/keyStore';
 
 function DeleteAccountDialog({
   derviedAccountNumber,
@@ -21,7 +21,7 @@ function DeleteAccountDialog({
   return (
     <Dialog>
       <DialogTrigger>
-        <Trash className="text-red-500 cursor-pointer" size={20} />
+        <Trash className='text-red-500 cursor-pointer' size={20} />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -30,21 +30,22 @@ function DeleteAccountDialog({
           </DialogTitle>
         </DialogHeader>
         <DialogFooter>
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <DialogClose asChild>
-              <Button type="button" variant="secondary">
+              <Button type='button' variant='secondary'>
                 Close
               </Button>
             </DialogClose>
-            <Button
-              variant={"destructive"}
-              onClick={() => {
-                deleteAccount(derviedAccountNumber);
-                return;
-              }}
-            >
-              Delete Account
-            </Button>
+            <DialogClose asChild>
+              <Button
+                variant={'destructive'}
+                onClick={() => {
+                  deleteAccount(derviedAccountNumber);
+                }}
+              >
+                Delete Account
+              </Button>
+            </DialogClose>
           </div>
         </DialogFooter>
       </DialogContent>

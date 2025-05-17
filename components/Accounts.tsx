@@ -1,26 +1,32 @@
-"use client";
+'use client';
 
-import { Button } from "./ui/button";
-import ClearWalletDialog from "./ClearWalletDialog";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import KeyToClipboard from "./KeyToClipboard";
-import DeleteAccountDialog from "./DeleteAccountDialog";
-import { useKeyStore } from "@/store/keyStore";
-import { deriveHdWallet } from "@/lib/deriveHdWallet";
-import { toast } from "sonner";
+import { Button } from './ui/button';
+import ClearWalletDialog from './ClearWalletDialog';
+import { Card, CardContent } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import KeyToClipboard from './KeyToClipboard';
+import DeleteAccountDialog from './DeleteAccountDialog';
+import { useKeyStore } from '@/store/keyStore';
+import { deriveHdWallet } from '@/lib/deriveHdWallet';
+import { toast } from 'sonner';
+import { useEffect, useRef } from 'react';
 
 function Accounts() {
   const mnemonicPhrase = useKeyStore((state) => state.mnemonics);
   const accounts = useKeyStore((state) => state.accounts);
   const addAccount = useKeyStore((state) => state.addAccount);
-  console.log(accounts);
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [accounts.length]);
 
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-between mb-8">
-        <div className="text-4xl font-bold">Accounts</div>
-        <div className="flex gap-2">
+    <div className='p-4'>
+      <div className='flex items-center justify-between mb-8'>
+        <div className='text-4xl font-bold'>Accounts</div>
+        <div className='flex gap-2'>
           <Button
             onClick={() => {
               let walletindex = 0;
@@ -54,7 +60,7 @@ function Accounts() {
                 derivedAccountNumber: walletindex,
               });
 
-              toast("Wallet Account Added!");
+              toast('Wallet Account Added!');
             }}
           >
             Add Account
@@ -62,84 +68,82 @@ function Accounts() {
           <ClearWalletDialog />
         </div>
       </div>
-      <div>
+      <div className='flex flex-col gap-4'>
         {accounts.map((ele, index) => (
-          <div className="border rounded-xl" key={index}>
-            <div className="flex justify-between items-center p-6">
-              <div className="text-3xl">
-                Account {ele.derivedAccountNumber + 1}
-              </div>
-              <div className="p-2 rounded-xl cursor-pointer">
+          <div className='border rounded-xl' key={index}>
+            <div className='flex justify-between items-center p-6'>
+              <div className='text-3xl'>Account {index + 1}</div>
+              <div className='p-2 rounded-xl cursor-pointer'>
                 <DeleteAccountDialog
                   derviedAccountNumber={ele.derivedAccountNumber}
                 />
               </div>
             </div>
 
-            <Tabs defaultValue="public-keys">
-              <TabsList className="mx-2">
-                <TabsTrigger value="public-keys" className="text-xl">
+            <Tabs defaultValue='public-keys'>
+              <TabsList className=''>
+                <TabsTrigger value='public-keys' className=''>
                   Public Keys
                 </TabsTrigger>
-                <TabsTrigger value="private-keys" className="text-xl">
+                <TabsTrigger value='private-keys' className=''>
                   Private Keys
                 </TabsTrigger>
                 {/* <TabsTrigger value="eth-balance" className="text-xl">
                   Eth Balance
                 </TabsTrigger> */}
               </TabsList>
-              <TabsContent value="public-keys">
-                <Card className="w-full">
+              <TabsContent value='public-keys'>
+                <Card className='w-full'>
                   <CardContent>
-                    <div className="flex flex-col gap-4">
+                    <div className='flex flex-col gap-4'>
                       <div>
-                        <div className="text-xl font-semibold">Bitcoin</div>
+                        <div className='text-xl font-semibold'>Bitcoin</div>
                         <KeyToClipboard
                           keyToCopy={ele.btc.publicAddress}
-                          privacy="public"
+                          privacy='public'
                         />
                       </div>
                       <div>
-                        <div className="text-xl font-semibold">Ethereum</div>
+                        <div className='text-xl font-semibold'>Ethereum</div>
                         <KeyToClipboard
                           keyToCopy={ele.eth.publicAddress}
-                          privacy="public"
+                          privacy='public'
                         />
                       </div>
                       <div>
-                        <div className="text-xl font-semibold">Solana</div>
+                        <div className='text-xl font-semibold'>Solana</div>
                         <KeyToClipboard
                           keyToCopy={ele.sol.publicAddress}
-                          privacy="public"
+                          privacy='public'
                         />
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               </TabsContent>
-              <TabsContent value="private-keys">
-                <Card className="w-full">
-                  <CardContent className="break-words">
-                    <div className="flex flex-col gap-4">
+              <TabsContent value='private-keys'>
+                <Card className='w-full'>
+                  <CardContent className='break-words'>
+                    <div className='flex flex-col gap-4'>
                       <div>
-                        <div className="text-xl font-semibold">Bitcoin</div>
+                        <div className='text-xl font-semibold'>Bitcoin</div>
                         <KeyToClipboard
                           keyToCopy={ele.btc.privateKey}
-                          privacy="private"
+                          privacy='private'
                         />
                       </div>
                       <div>
-                        <div className="text-xl font-semibold">Ethereum</div>
+                        <div className='text-xl font-semibold'>Ethereum</div>
                         <KeyToClipboard
                           keyToCopy={ele.eth.privateKey}
-                          privacy="private"
+                          privacy='private'
                         />
                       </div>
                       <div>
-                        <div className="text-xl font-semibold">Solana</div>
+                        <div className='text-xl font-semibold'>Solana</div>
                         <KeyToClipboard
                           keyToCopy={ele.sol.privateKey}
-                          privacy="private"
+                          privacy='private'
                         />
                       </div>
                     </div>
@@ -155,6 +159,7 @@ function Accounts() {
           </div>
         ))}
       </div>
+      <div ref={bottomRef} />
     </div>
   );
 }
