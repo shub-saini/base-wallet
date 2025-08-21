@@ -37,7 +37,7 @@ A minimal **Next.js** project for generating and managing HD wallets via mnemoni
 ## 🛠️ Development
 
 ```bash
-git clone https://github.com/your-username/base-wallet.git
+git clone https://github.com/shub-saini/base-wallet.git
 cd base-wallet
 bun install
 bun run dev
