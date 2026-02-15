@@ -1,0 +1,41 @@
+---
+- name: Install and configure Nginx
+  hosts: gcp
+  become: yes
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Create Nginx configuration
+      copy:
+        dest: /etc/nginx/nginx.conf
+        content: |
+          events {
+              worker_connections 1024;
+          }
+          http {
+              server {
+                  listen 80;
+                  server_name app.vyntix.tech;
+                  location / {
+                      proxy_pass http://localhost:3000;
+                      proxy_http_version 1.1;
+                      proxy_set_header Upgrade $http_upgrade;
+                      proxy_set_header Connection 'upgrade';
+                      proxy_set_header Host $host;
+                      proxy_cache_bypass $http_upgrade;
+                  }
+              }
+          }
+
+    - name: Test Nginx configuration
+      command: nginx -t
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes
