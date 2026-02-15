@@ -1,4 +1,4 @@
-name: Continuos Delivery
+name: Continuos Deployment
 
 on:
     workflow_run:
