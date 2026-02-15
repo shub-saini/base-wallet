@@ -1,11 +1,10 @@
 name: Continuos Delivery
 
 on:
-    workflow_dispatch:
-    # workflow_run:
-    #     workflows: ["Continuos Integration"]
-    #     types:
-    #         - completed
+    workflow_run:
+        workflows: ["Continuos Integration"]
+        types:
+            - completed
 
 jobs:
     deploy-on-vm:
@@ -22,5 +21,13 @@ jobs:
             - name: Deploy to VM
               run: |
                   ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << 'EOF'
-                  echo  "hello" > hello.txt
-                  EOF
+                  docker pull shubhsaini/wallet-app:${{ github.event.workflow_run.head_sha }}
+
+                  docker stop wallet-app || true
+                  docker rm wallet-app || true
+
+                  docker image prune -a -f
+
+                  docker run -d --name wallet-app -p 3000:3000 --restart unless-stopped shubhsaini/wallet-app:${{ github.event.workflow_run.head_sha }}
+                  docker ps
+                    EOF
