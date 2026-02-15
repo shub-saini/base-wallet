@@ -63,5 +63,5 @@ jobs:
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
 
-      - name: Verify Pushed image
-        run: docker pull shubhsaini/wallet-app:${{ github.sha }}
+      - name: Push Docker image
+        run: docker push shubhsaini/wallet-app:${{ github.sha }}
