@@ -25,9 +25,8 @@ jobs:
 
                   docker stop wallet-app || true
                   docker rm wallet-app || true
-
                   docker image prune -a -f
 
                   docker run -d --name wallet-app -p 3000:3000 --restart unless-stopped shubhsaini/wallet-app:${{ github.event.workflow_run.head_sha }}
                   docker ps
-                    EOF
+                  EOF
