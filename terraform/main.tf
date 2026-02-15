@@ -1,3 +1,12 @@
+data "google_client_openid_userinfo" "me" {
+}
+
+resource "google_os_login_ssh_public_key" "default" {
+  project = var.project_id
+  user    = data.google_client_openid_userinfo.me.email
+  key     = file("~/.ssh/id_app-vm.pub")
+}
+
 resource "google_service_account" "vm_sa" {
   account_id   = "my-custom-sa"
   display_name = "Custom SA for VM Instance"
@@ -62,5 +71,9 @@ resource "google_compute_instance" "vm" {
   service_account {
     email  = google_service_account.vm_sa.email
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+  }
+
+  metadata = {
+    enable-oslogin = "TRUE"
   }
 }
